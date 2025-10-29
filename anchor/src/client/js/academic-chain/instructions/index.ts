@@ -6,8 +6,9 @@
  * @see https://github.com/codama-idl/codama
  */
 
-export * from './close';
-export * from './decrement';
-export * from './increment';
+export * from './claimGraduation';
+export * from './completeCourse';
 export * from './initialize';
-export * from './set';
+export * from './mintCertificate';
+export * from './purchaseCredits';
+export * from './registerCourse';
