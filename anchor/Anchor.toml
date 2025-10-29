@@ -7,6 +7,10 @@ skip-lint = false
 
 [programs.localnet]
 eduapp = "Count3AcZucFDPSFBAeHkQ6AvttieKUkyJ8HiQGhQwe"
+academic_chain = "9HuNte7WjS8GVHBKpE42y1QXq4C7e6uNvtjmDRM1G99F"
+
+[programs.devnet]
+academic_chain = "9HuNte7WjS8GVHBKpE42y1QXq4C7e6uNvtjmDRM1G99F"
 
 [registry]
 url = "https://api.apr.dev"

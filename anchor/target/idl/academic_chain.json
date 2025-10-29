@@ -1,0 +1,1132 @@
+{
+  "address": "9HuNte7WjS8GVHBKpE42y1QXq4C7e6uNvtjmDRM1G99F",
+  "metadata": {
+    "name": "academic_chain",
+    "version": "0.1.0",
+    "spec": "0.1.0",
+    "description": "Decentralized academic credit and certification system"
+  },
+  "instructions": [
+    {
+      "name": "claim_graduation",
+      "docs": [
+        "Claim graduation NFT"
+      ],
+      "discriminator": [
+        87,
+        121,
+        87,
+        168,
+        63,
+        70,
+        91,
+        158
+      ],
+      "accounts": [
+        {
+          "name": "student",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "student_profile",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  115,
+                  116,
+                  117,
+                  100,
+                  101,
+                  110,
+                  116,
+                  95,
+                  112,
+                  114,
+                  111,
+                  102,
+                  105,
+                  108,
+                  101
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "student"
+              }
+            ]
+          }
+        },
+        {
+          "name": "graduation_mint",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  103,
+                  114,
+                  97,
+                  100,
+                  117,
+                  97,
+                  116,
+                  105,
+                  111,
+                  110,
+                  95,
+                  109,
+                  105,
+                  110,
+                  116
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "student"
+              }
+            ]
+          }
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "required_courses",
+          "type": {
+            "vec": "string"
+          }
+        }
+      ]
+    },
+    {
+      "name": "complete_course",
+      "docs": [
+        "Mark course as completed"
+      ],
+      "discriminator": [
+        91,
+        113,
+        236,
+        190,
+        183,
+        191,
+        2,
+        63
+      ],
+      "accounts": [
+        {
+          "name": "instructor",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "course",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  99,
+                  111,
+                  117,
+                  114,
+                  115,
+                  101
+                ]
+              },
+              {
+                "kind": "arg",
+                "path": "course_id"
+              }
+            ]
+          }
+        },
+        {
+          "name": "student"
+        },
+        {
+          "name": "enrollment",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  101,
+                  110,
+                  114,
+                  111,
+                  108,
+                  108,
+                  109,
+                  101,
+                  110,
+                  116
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "student"
+              },
+              {
+                "kind": "arg",
+                "path": "course_id"
+              }
+            ]
+          }
+        },
+        {
+          "name": "student_profile",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  115,
+                  116,
+                  117,
+                  100,
+                  101,
+                  110,
+                  116,
+                  95,
+                  112,
+                  114,
+                  111,
+                  102,
+                  105,
+                  108,
+                  101
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "student"
+              }
+            ]
+          }
+        }
+      ],
+      "args": [
+        {
+          "name": "course_id",
+          "type": "string"
+        },
+        {
+          "name": "grade",
+          "type": "u8"
+        }
+      ]
+    },
+    {
+      "name": "initialize",
+      "docs": [
+        "Initialize the program"
+      ],
+      "discriminator": [
+        175,
+        175,
+        109,
+        31,
+        13,
+        152,
+        155,
+        237
+      ],
+      "accounts": [
+        {
+          "name": "authority",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "config",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  99,
+                  111,
+                  110,
+                  102,
+                  105,
+                  103
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "treasury"
+        },
+        {
+          "name": "credit_mint"
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "mint_certificate",
+      "docs": [
+        "Mint NFT certificate"
+      ],
+      "discriminator": [
+        53,
+        2,
+        104,
+        84,
+        51,
+        197,
+        179,
+        10
+      ],
+      "accounts": [
+        {
+          "name": "student",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "course",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  99,
+                  111,
+                  117,
+                  114,
+                  115,
+                  101
+                ]
+              },
+              {
+                "kind": "arg",
+                "path": "course_id"
+              }
+            ]
+          }
+        },
+        {
+          "name": "enrollment",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  101,
+                  110,
+                  114,
+                  111,
+                  108,
+                  108,
+                  109,
+                  101,
+                  110,
+                  116
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "student"
+              },
+              {
+                "kind": "arg",
+                "path": "course_id"
+              }
+            ]
+          }
+        },
+        {
+          "name": "certificate_mint",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  99,
+                  101,
+                  114,
+                  116,
+                  105,
+                  102,
+                  105,
+                  99,
+                  97,
+                  116,
+                  101,
+                  95,
+                  109,
+                  105,
+                  110,
+                  116
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "student"
+              },
+              {
+                "kind": "arg",
+                "path": "course_id"
+              }
+            ]
+          }
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "course_id",
+          "type": "string"
+        },
+        {
+          "name": "metadata_uri",
+          "type": "string"
+        }
+      ]
+    },
+    {
+      "name": "purchase_credits",
+      "docs": [
+        "Purchase credit tokens"
+      ],
+      "discriminator": [
+        228,
+        95,
+        55,
+        42,
+        168,
+        253,
+        222,
+        216
+      ],
+      "accounts": [
+        {
+          "name": "student",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "config",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  99,
+                  111,
+                  110,
+                  102,
+                  105,
+                  103
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "treasury",
+          "writable": true
+        },
+        {
+          "name": "credit_mint",
+          "writable": true
+        },
+        {
+          "name": "student_credit_account",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "account",
+                "path": "student"
+              },
+              {
+                "kind": "const",
+                "value": [
+                  6,
+                  221,
+                  246,
+                  225,
+                  215,
+                  101,
+                  161,
+                  147,
+                  217,
+                  203,
+                  225,
+                  70,
+                  206,
+                  235,
+                  121,
+                  172,
+                  28,
+                  180,
+                  133,
+                  237,
+                  95,
+                  91,
+                  55,
+                  145,
+                  58,
+                  140,
+                  245,
+                  133,
+                  126,
+                  255,
+                  0,
+                  169
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "credit_mint"
+              }
+            ],
+            "program": {
+              "kind": "const",
+              "value": [
+                140,
+                151,
+                37,
+                143,
+                78,
+                36,
+                137,
+                241,
+                187,
+                61,
+                16,
+                41,
+                20,
+                142,
+                13,
+                131,
+                11,
+                90,
+                19,
+                153,
+                218,
+                255,
+                16,
+                132,
+                4,
+                142,
+                123,
+                216,
+                219,
+                233,
+                248,
+                89
+              ]
+            }
+          }
+        },
+        {
+          "name": "student_profile",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  115,
+                  116,
+                  117,
+                  100,
+                  101,
+                  110,
+                  116,
+                  95,
+                  112,
+                  114,
+                  111,
+                  102,
+                  105,
+                  108,
+                  101
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "student"
+              }
+            ]
+          }
+        },
+        {
+          "name": "token_program",
+          "address": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA"
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "amount",
+          "type": "u64"
+        }
+      ]
+    },
+    {
+      "name": "register_course",
+      "docs": [
+        "Register for a course"
+      ],
+      "discriminator": [
+        254,
+        131,
+        130,
+        70,
+        100,
+        68,
+        139,
+        121
+      ],
+      "accounts": [
+        {
+          "name": "student",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "course",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  99,
+                  111,
+                  117,
+                  114,
+                  115,
+                  101
+                ]
+              },
+              {
+                "kind": "arg",
+                "path": "course_id"
+              }
+            ]
+          }
+        },
+        {
+          "name": "enrollment",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  101,
+                  110,
+                  114,
+                  111,
+                  108,
+                  108,
+                  109,
+                  101,
+                  110,
+                  116
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "student"
+              },
+              {
+                "kind": "arg",
+                "path": "course_id"
+              }
+            ]
+          }
+        },
+        {
+          "name": "student_profile",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  115,
+                  116,
+                  117,
+                  100,
+                  101,
+                  110,
+                  116,
+                  95,
+                  112,
+                  114,
+                  111,
+                  102,
+                  105,
+                  108,
+                  101
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "student"
+              }
+            ]
+          }
+        },
+        {
+          "name": "config",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  99,
+                  111,
+                  110,
+                  102,
+                  105,
+                  103
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "credit_mint",
+          "writable": true
+        },
+        {
+          "name": "student_credit_account",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "account",
+                "path": "student"
+              },
+              {
+                "kind": "const",
+                "value": [
+                  6,
+                  221,
+                  246,
+                  225,
+                  215,
+                  101,
+                  161,
+                  147,
+                  217,
+                  203,
+                  225,
+                  70,
+                  206,
+                  235,
+                  121,
+                  172,
+                  28,
+                  180,
+                  133,
+                  237,
+                  95,
+                  91,
+                  55,
+                  145,
+                  58,
+                  140,
+                  245,
+                  133,
+                  126,
+                  255,
+                  0,
+                  169
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "credit_mint"
+              }
+            ],
+            "program": {
+              "kind": "const",
+              "value": [
+                140,
+                151,
+                37,
+                143,
+                78,
+                36,
+                137,
+                241,
+                187,
+                61,
+                16,
+                41,
+                20,
+                142,
+                13,
+                131,
+                11,
+                90,
+                19,
+                153,
+                218,
+                255,
+                16,
+                132,
+                4,
+                142,
+                123,
+                216,
+                219,
+                233,
+                248,
+                89
+              ]
+            }
+          }
+        },
+        {
+          "name": "token_program",
+          "address": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA"
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "course_id",
+          "type": "string"
+        }
+      ]
+    }
+  ],
+  "accounts": [
+    {
+      "name": "Course",
+      "discriminator": [
+        206,
+        6,
+        78,
+        228,
+        163,
+        138,
+        241,
+        106
+      ]
+    },
+    {
+      "name": "CourseEnrollment",
+      "discriminator": [
+        119,
+        94,
+        144,
+        89,
+        26,
+        179,
+        54,
+        137
+      ]
+    },
+    {
+      "name": "ProgramConfig",
+      "discriminator": [
+        196,
+        210,
+        90,
+        231,
+        144,
+        149,
+        140,
+        63
+      ]
+    },
+    {
+      "name": "StudentProfile",
+      "discriminator": [
+        185,
+        172,
+        160,
+        26,
+        178,
+        113,
+        216,
+        235
+      ]
+    }
+  ],
+  "errors": [
+    {
+      "code": 6000,
+      "name": "InsufficientCredits",
+      "msg": "Insufficient credits to register for this course"
+    },
+    {
+      "code": 6001,
+      "name": "CourseNotActive",
+      "msg": "Course is not active"
+    },
+    {
+      "code": 6002,
+      "name": "AlreadyEnrolled",
+      "msg": "Student already enrolled in this course"
+    },
+    {
+      "code": 6003,
+      "name": "CourseNotCompleted",
+      "msg": "Course not completed yet"
+    },
+    {
+      "code": 6004,
+      "name": "InvalidGrade",
+      "msg": "Invalid grade value (must be 0-100)"
+    },
+    {
+      "code": 6005,
+      "name": "UnauthorizedInstructor",
+      "msg": "Unauthorized: Only instructor can perform this action"
+    },
+    {
+      "code": 6006,
+      "name": "CertificateAlreadyMinted",
+      "msg": "Certificate already minted for this course"
+    },
+    {
+      "code": 6007,
+      "name": "RequirementsNotMet",
+      "msg": "Not all required courses completed"
+    },
+    {
+      "code": 6008,
+      "name": "InvalidCourseId",
+      "msg": "Invalid course ID format"
+    },
+    {
+      "code": 6009,
+      "name": "ArithmeticOverflow",
+      "msg": "Arithmetic overflow"
+    }
+  ],
+  "types": [
+    {
+      "name": "Course",
+      "docs": [
+        "Course information"
+      ],
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "course_id",
+            "type": "string"
+          },
+          {
+            "name": "course_name",
+            "type": "string"
+          },
+          {
+            "name": "instructor",
+            "type": "pubkey"
+          },
+          {
+            "name": "required_credits",
+            "type": "u64"
+          },
+          {
+            "name": "is_active",
+            "type": "bool"
+          },
+          {
+            "name": "created_at",
+            "type": "i64"
+          },
+          {
+            "name": "bump",
+            "type": "u8"
+          }
+        ]
+      }
+    },
+    {
+      "name": "CourseEnrollment",
+      "docs": [
+        "Student course enrollment"
+      ],
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "student",
+            "type": "pubkey"
+          },
+          {
+            "name": "course_id",
+            "type": "string"
+          },
+          {
+            "name": "credits_paid",
+            "type": "u64"
+          },
+          {
+            "name": "enrollment_date",
+            "type": "i64"
+          },
+          {
+            "name": "completion_date",
+            "type": {
+              "option": "i64"
+            }
+          },
+          {
+            "name": "is_completed",
+            "type": "bool"
+          },
+          {
+            "name": "grade",
+            "type": "u8"
+          },
+          {
+            "name": "certificate_mint",
+            "type": {
+              "option": "pubkey"
+            }
+          },
+          {
+            "name": "bump",
+            "type": "u8"
+          }
+        ]
+      }
+    },
+    {
+      "name": "ProgramConfig",
+      "docs": [
+        "Program configuration"
+      ],
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "authority",
+            "type": "pubkey"
+          },
+          {
+            "name": "credit_mint",
+            "type": "pubkey"
+          },
+          {
+            "name": "treasury",
+            "type": "pubkey"
+          },
+          {
+            "name": "credit_price",
+            "type": "u64"
+          },
+          {
+            "name": "bump",
+            "type": "u8"
+          }
+        ]
+      }
+    },
+    {
+      "name": "StudentProfile",
+      "docs": [
+        "Student profile"
+      ],
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "student",
+            "type": "pubkey"
+          },
+          {
+            "name": "total_credits_purchased",
+            "type": "u64"
+          },
+          {
+            "name": "total_credits_spent",
+            "type": "u64"
+          },
+          {
+            "name": "courses_completed",
+            "type": "u16"
+          },
+          {
+            "name": "graduation_nft",
+            "type": {
+              "option": "pubkey"
+            }
+          },
+          {
+            "name": "created_at",
+            "type": "i64"
+          },
+          {
+            "name": "bump",
+            "type": "u8"
+          }
+        ]
+      }
+    }
+  ],
+  "constants": [
+    {
+      "name": "CERTIFICATE_MINT_SEED",
+      "type": "bytes",
+      "value": "[99, 101, 114, 116, 105, 102, 105, 99, 97, 116, 101, 95, 109, 105, 110, 116]"
+    },
+    {
+      "name": "COURSE_SEED",
+      "type": "bytes",
+      "value": "[99, 111, 117, 114, 115, 101]"
+    },
+    {
+      "name": "ENROLLMENT_SEED",
+      "type": "bytes",
+      "value": "[101, 110, 114, 111, 108, 108, 109, 101, 110, 116]"
+    },
+    {
+      "name": "GRADUATION_MINT_SEED",
+      "type": "bytes",
+      "value": "[103, 114, 97, 100, 117, 97, 116, 105, 111, 110, 95, 109, 105, 110, 116]"
+    },
+    {
+      "name": "PROGRAM_CONFIG_SEED",
+      "type": "bytes",
+      "value": "[99, 111, 110, 102, 105, 103]"
+    },
+    {
+      "name": "STUDENT_PROFILE_SEED",
+      "type": "bytes",
+      "value": "[115, 116, 117, 100, 101, 110, 116, 95, 112, 114, 111, 102, 105, 108, 101]"
+    }
+  ]
+}
