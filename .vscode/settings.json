@@ -1,0 +1,6 @@
+{
+  "terminal.integrated.shellIntegration.enabled": true,
+  "terminal.integrated.shellIntegration.decorationsEnabled": "both",
+  "terminal.integrated.shellIntegration.showWelcome": false,
+  "terminal.integrated.commandTimeout": 30000
+}
