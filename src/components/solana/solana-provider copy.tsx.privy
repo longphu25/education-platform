@@ -1,0 +1,10 @@
+import { ReactNode } from 'react'
+import { PrivySolanaProvider } from '@/components/privy/privy-solana-provider'
+
+export function SolanaProvider({ children }: { children: ReactNode }) {
+  return (
+    <PrivySolanaProvider>
+      {children}
+    </PrivySolanaProvider>
+  )
+}

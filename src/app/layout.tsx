@@ -14,6 +14,10 @@ const links: { label: string; path: string }[] = [
   { label: 'Home', path: '/' },
   { label: 'Account', path: '/account' },
   { label: 'Eduapp Program', path: '/eduapp' },
+  { label: 'Zerion', path: '/zerion' },
+  { label: 'Zerion Tool', path: '/zerion-tool' },
+  // { label: 'Privy Demo', path: '/privy-demo' },
+  // { label: 'Wallet Debug', path: '/wallet-debug' },
 ]
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {

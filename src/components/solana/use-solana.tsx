@@ -1,6 +1,9 @@
 import { useWalletUi } from '@wallet-ui/react'
 import { useWalletUiGill } from '@wallet-ui/react-gill'
 
+export type WalletType = 'embedded' | 'external' | null;
+export type LoginMethod = 'email' | 'phone' | 'social' | 'wallet' | null;
+
 /**
  * Custom hook to abstract Wallet UI and related functionality from your app.
  *

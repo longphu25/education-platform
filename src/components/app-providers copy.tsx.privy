@@ -1,0 +1,79 @@
+'use client'
+
+import { PrivyProvider } from '@privy-io/react-auth'
+import { toSolanaWalletConnectors } from '@privy-io/react-auth/solana'
+import { createSolanaRpc, createSolanaRpcSubscriptions } from '@solana/kit'
+import { ThemeProvider } from '@/components/theme-provider'
+import { ReactQueryProvider } from './react-query-provider'
+import React from 'react'
+
+export function AppProviders({ children }: Readonly<{ children: React.ReactNode }>) {
+  return (
+    <ReactQueryProvider>
+      <PrivyProvider
+        appId={process.env.NEXT_PUBLIC_PRIVY_APP_ID!}
+        config={{
+          embeddedWallets: {
+            solana: {
+              createOnLogin: 'users-without-wallets',
+            },
+          },
+          appearance: {
+            walletChainType: 'solana-only',
+            theme: 'light',
+            accentColor: '#676FFF',
+            showWalletLoginFirst: true,
+          },
+          loginMethods: [
+            'wallet',
+            'email',
+            'sms',
+            'google',
+            'twitter',
+            'discord', 
+            'github',
+            'linkedin',
+          ],
+          externalWallets: {
+            solana: {
+              connectors: toSolanaWalletConnectors(),
+            },
+          },
+          solana: {
+            rpcs: {
+              'solana:mainnet': {
+                rpc: createSolanaRpc(
+                  process.env.NEXT_PUBLIC_SOLANA_MAINNET_RPC_URL ||
+                  'https://api.mainnet-beta.solana.com',
+                ),
+                rpcSubscriptions: createSolanaRpcSubscriptions(
+                  process.env.NEXT_PUBLIC_SOLANA_MAINNET_RPC_URL?.replace(
+                    'http',
+                    'ws',
+                  ) || 'wss://api.mainnet-beta.solana.com',
+                ),
+              },
+              'solana:devnet': {
+                rpc: createSolanaRpc('https://api.devnet.solana.com'),
+                rpcSubscriptions: createSolanaRpcSubscriptions(
+                  'wss://api.devnet.solana.com',
+                ),
+              },
+            },
+          },
+          mfa: {
+            noPromptOnMfaRequired: false,
+          },
+          legal: {
+            termsAndConditionsUrl: undefined,
+            privacyPolicyUrl: undefined,
+          },
+        }}
+      >
+        <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
+          {children}
+        </ThemeProvider>
+      </PrivyProvider>
+    </ReactQueryProvider>
+  )
+}

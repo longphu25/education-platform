@@ -1,0 +1,124 @@
+import { useSolana } from '@/components/solana/use-solana'
+import { AppHero } from '@/components/app-hero'
+import { EduappUiButtonInitialize } from './ui/eduapp-ui-button-initialize'
+import { EduappUiList } from './ui/eduapp-ui-list'
+import { EduappUiProgramExplorerLink } from './ui/eduapp-ui-program-explorer-link'
+import { EduappUiProgramGuard } from './ui/eduapp-ui-program-guard'
+import { SmartWalletConnect } from '@/components/privy/smart-wallet-connect'
+import { Badge } from '@/components/ui/badge'
+
+export default function EduappFeature() {
+  const { 
+    account, 
+    authenticated, 
+    walletType, 
+    loginMethod,
+    isCreatingWallet,
+    externalWallet
+  } = useSolana()
+
+  // Dynamic subtitle based on wallet state
+  const getSubtitle = () => {
+    if (!authenticated) {
+      return 'Connect with Privy to get started. Choose email/social for embedded wallet or connect your existing Solana wallet.'
+    }
+    
+    if (isCreatingWallet) {
+      return 'Setting up your embedded Solana wallet... This will enable you to interact with the program.'
+    }
+    
+    if (account && walletType) {
+      return `Ready to interact! You're connected with ${walletType === 'embedded' ? 'an embedded' : 'your external'} Solana wallet. Initialize a new eduapp onchain or use existing accounts.`
+    }
+    
+    return 'Finalizing wallet setup...'
+  }
+
+  // Get status information
+  const getStatusInfo = () => {
+    if (!authenticated) return null
+    
+    return (
+      <div className="flex flex-wrap gap-2 mb-4">
+        <Badge variant="default">
+          {loginMethod} login
+        </Badge>
+        {walletType && (
+          <Badge variant={walletType === 'embedded' ? 'default' : 'secondary'}>
+            {walletType} wallet
+          </Badge>
+        )}
+        {account && (
+          <Badge variant="default">
+            Ready for transactions
+          </Badge>
+        )}
+      </div>
+    )
+  }
+
+  return (
+    <EduappUiProgramGuard>
+      <AppHero
+        title="Eduapp - Smart Wallet Integration"
+        subtitle={getSubtitle()}
+      >
+        <p className="mb-6">
+          <EduappUiProgramExplorerLink />
+        </p>
+        
+        {/* Status Information */}
+        {getStatusInfo()}
+        
+        {/* Smart Wallet Connection */}
+        <div className="space-y-6 mb-6">
+          <div className="space-y-2">
+            <h3 className="text-sm font-medium text-gray-700">
+              Wallet Connection
+            </h3>
+            <SmartWalletConnect />
+            
+            {/* Workflow explanation */}
+            {!authenticated && (
+              <div className="text-xs text-gray-500 p-3 bg-gray-50 rounded-lg space-y-1">
+                <div><strong>📧 Email/Social Login:</strong> Auto-creates secure embedded Solana wallet</div>
+                <div><strong>🔗 Wallet Login:</strong> Uses your existing Phantom, Solflare, etc.</div>
+                <div><strong>🔄 Switch anytime:</strong> Can link additional accounts or wallets</div>
+              </div>
+            )}
+            
+            {/* Wallet-specific info */}
+            {authenticated && walletType && (
+              <div className="text-xs text-gray-500 p-3 bg-gray-50 rounded-lg">
+                {walletType === 'embedded' ? (
+                  <>
+                    <strong>🔒 Embedded Wallet Active:</strong> Your wallet is securely managed by Privy. 
+                    No need to install browser extensions or manage seed phrases.
+                  </>
+                ) : (
+                  <>
+                    <strong>🔗 External Wallet Active:</strong> Using your {externalWallet?.label || 'connected wallet'}. 
+                    All transactions will be signed through your wallet app.
+                  </>
+                )}
+              </div>
+            )}
+          </div>
+        </div>
+
+        {/* Program Interaction - Only show when user has account */}
+        {account && !isCreatingWallet && (
+          <div className="mt-6 p-4 border rounded-lg bg-green-50">
+            <h4 className="text-sm font-medium text-green-900 mb-2">
+              🎉 Ready to interact with Solana program!
+            </h4>
+            <EduappUiButtonInitialize account={account} />
+          </div>
+        )}
+      </AppHero>
+      
+      {/* Show program accounts if user is connected and has wallet ready */}
+      {account && !isCreatingWallet && <EduappUiList account={account} />}
+    </EduappUiProgramGuard>
+  )
+}
