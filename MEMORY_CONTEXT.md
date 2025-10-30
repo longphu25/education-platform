@@ -12,6 +12,19 @@ This is a **Solana-based educational application** built for the APEC education 
 - **Wallet Integration**: Wallet UI components with Gill Solana SDK
 - **Theme**: Dark/light mode support with next-themes
 
+### **AcademicChain Pages Structure**
+- **Dashboard System**: Complete educational platform UI
+  - Dashboard Home with stats and quick actions
+  - Credit purchase system with package selection
+  - Course browsing with search and filters
+  - Course registration with balance validation
+  - Certificate NFT gallery with graduation tracking
+- **Mock Data**: Comprehensive mock data for development
+  - Students, courses, enrollments, certificates, transactions
+  - 4 diverse courses (Solana, Web3, Rust, Advanced)
+  - Progress tracking and completion certificates
+- **API Routes**: Mock API endpoints for courses, certificates, transactions
+
 ### **Blockchain (Solana)**
 - **Program**: Anchor-based Rust program (`eduapp`)
 - **Program ID**: `Count3AcZucFDPSFBAeHkQ6AvttieKUkyJ8HiQGhQwe`
@@ -33,11 +46,29 @@ This is a **Solana-based educational application** built for the APEC education 
 - `src/eduapp-exports.ts` - Custom exports and helper functions
 
 ### **Frontend** (`/src/`)
+
 - **App Structure**:
   - `app/layout.tsx` - Root layout with providers
   - `app/page.tsx` - Home page
   - `app/eduapp/page.tsx` - Main program interface
   - `app/account/` - Account management pages
+
+- **AcademicChain Dashboard** (`/app/dashboard/`):
+  - `layout.tsx` - Dashboard layout with sidebar navigation
+  - `page.tsx` - Dashboard home with stats and quick actions
+  - `courses/page.tsx` - Course browsing with search and filters
+  - `courses/[courseId]/register/page.tsx` - Course registration flow
+  - `credits/buy/page.tsx` - Credit purchase system
+  - `certificates/page.tsx` - NFT certificates and graduation tracking
+
+- **Type Definitions** (`/types/`):
+  - Student, Course, CourseEnrollment, Certificate, Transaction interfaces
+  - Complete TypeScript type coverage for educational platform
+
+- **Mock Data** (`/lib/mockData.ts`):
+  - Comprehensive mock data for development
+  - Students, courses, enrollments, certificates, transactions
+  - 4 diverse courses: Solana fundamentals, Advanced Solana, Web3 Frontend, Rust for Blockchain
 
 - **Features** (Modular architecture):
   - `features/eduapp/` - Main program interaction logic
@@ -154,6 +185,49 @@ The project uses Codama to generate TypeScript bindings:
 - BigInt serialization patch for JSON logging
 - Mobile wallet support included
 
+## 🎓 **AcademicChain Educational Platform**
+
+### **Complete Dashboard System**
+
+The project includes a full educational platform dashboard with:
+
+- **Dashboard Home**: Overview with stats (credits, active courses, certificates, progress)
+- **Credit System**: Purchase credits with bonus packages (10, 25, 50, 100 credits)
+- **Course Management**: 
+  - Browse courses with search and difficulty filters
+  - Course registration with balance validation
+  - Progress tracking for enrolled courses
+- **Certificate System**:
+  - NFT certificate gallery with blockchain verification
+  - Graduation progress tracking (5 courses required)
+  - Completion status and grades
+
+### **Mock Data Architecture**
+
+Complete mock data for development (`src/lib/mockData.ts`):
+- **Students**: Profile with credit balance and completion stats
+- **Courses**: 4 diverse courses (Solana Fundamentals, Advanced Solana, Web3 Frontend, Rust for Blockchain)
+- **Enrollments**: Progress tracking with completion status
+- **Certificates**: Course completion certificates with grades and mint addresses
+- **Transactions**: Credit purchases, course registrations, certificate minting
+
+### **UI Implementation**
+
+- Sidebar navigation with active route highlighting
+- Responsive card-based layouts
+- Progress bars for course and graduation tracking
+- Badge system for status indicators
+- Search and filter functionality
+- Mock transaction flows with loading states
+
+### **Ready for Blockchain Integration**
+
+All pages are designed to integrate with real Solana programs:
+- Type-safe interfaces for blockchain data
+- Mock API routes ready to be replaced with real queries
+- Transaction patterns implemented
+- Wallet integration points prepared
+
 ---
 
-*Generated on October 28, 2025 - Solana Edu App Memory Context*
+*Updated on October 29, 2025 - Solana Edu App Memory Context with AcademicChain Dashboard*
