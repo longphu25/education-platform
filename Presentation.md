@@ -34,7 +34,7 @@
 flowchart TD
     Start((Connect Wallet))
     Start --> Credits[Buy Tokenized Credits]
-    Credits --> Enroll[Enroll in Course (Burn Credits)]
+    Credits --> Enroll["Enroll in Course (Burn Credits)"]
     Enroll --> Progress[Complete Course]
     Progress --> Instructor[Instructor Validates Completion]
     Instructor --> MintNFT[Mint NFT Certificate]
