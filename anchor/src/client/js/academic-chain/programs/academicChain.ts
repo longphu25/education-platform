@@ -16,6 +16,7 @@ import {
 import {
   type ParsedClaimGraduationInstruction,
   type ParsedCompleteCourseInstruction,
+  type ParsedCreateCourseInstruction,
   type ParsedInitializeInstruction,
   type ParsedMintCertificateInstruction,
   type ParsedPurchaseCreditsInstruction,
@@ -88,6 +89,7 @@ export function identifyAcademicChainAccount(
 export enum AcademicChainInstruction {
   ClaimGraduation,
   CompleteCourse,
+  CreateCourse,
   Initialize,
   MintCertificate,
   PurchaseCredits,
@@ -119,6 +121,17 @@ export function identifyAcademicChainInstruction(
     )
   ) {
     return AcademicChainInstruction.CompleteCourse;
+  }
+  if (
+    containsBytes(
+      data,
+      fixEncoderSize(getBytesEncoder(), 8).encode(
+        new Uint8Array([120, 121, 154, 164, 107, 180, 167, 241])
+      ),
+      0
+    )
+  ) {
+    return AcademicChainInstruction.CreateCourse;
   }
   if (
     containsBytes(
@@ -178,6 +191,9 @@ export type ParsedAcademicChainInstruction<
   | ({
       instructionType: AcademicChainInstruction.CompleteCourse;
     } & ParsedCompleteCourseInstruction<TProgram>)
+  | ({
+      instructionType: AcademicChainInstruction.CreateCourse;
+    } & ParsedCreateCourseInstruction<TProgram>)
   | ({
       instructionType: AcademicChainInstruction.Initialize;
     } & ParsedInitializeInstruction<TProgram>)

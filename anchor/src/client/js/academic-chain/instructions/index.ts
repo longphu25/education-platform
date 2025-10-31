@@ -8,6 +8,7 @@
 
 export * from './claimGraduation';
 export * from './completeCourse';
+export * from './createCourse';
 export * from './initialize';
 export * from './mintCertificate';
 export * from './purchaseCredits';

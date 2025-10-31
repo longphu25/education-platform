@@ -29,6 +29,15 @@ pub enum AcademicChainError {
     #[msg("Invalid course ID format")]
     InvalidCourseId,
     
+    #[msg("Invalid course name")]
+    InvalidCourseName,
+    
+    #[msg("Invalid credits amount")]
+    InvalidCredits,
+    
+    #[msg("Unauthorized: Only program authority can perform this action")]
+    Unauthorized,
+    
     #[msg("Arithmetic overflow")]
     ArithmeticOverflow,
 }

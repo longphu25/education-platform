@@ -228,6 +228,74 @@
       ]
     },
     {
+      "name": "create_course",
+      "docs": [
+        "Create a new course"
+      ],
+      "discriminator": [
+        120,
+        121,
+        154,
+        164,
+        107,
+        180,
+        167,
+        241
+      ],
+      "accounts": [
+        {
+          "name": "authority",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "course",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  99,
+                  111,
+                  117,
+                  114,
+                  115,
+                  101
+                ]
+              },
+              {
+                "kind": "arg",
+                "path": "course_id"
+              }
+            ]
+          }
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "course_id",
+          "type": "string"
+        },
+        {
+          "name": "course_name",
+          "type": "string"
+        },
+        {
+          "name": "instructor",
+          "type": "pubkey"
+        },
+        {
+          "name": "required_credits",
+          "type": "u64"
+        }
+      ]
+    },
+    {
       "name": "initialize",
       "docs": [
         "Initialize the program"
@@ -929,6 +997,21 @@
     },
     {
       "code": 6009,
+      "name": "InvalidCourseName",
+      "msg": "Invalid course name"
+    },
+    {
+      "code": 6010,
+      "name": "InvalidCredits",
+      "msg": "Invalid credits amount"
+    },
+    {
+      "code": 6011,
+      "name": "Unauthorized",
+      "msg": "Unauthorized: Only program authority can perform this action"
+    },
+    {
+      "code": 6012,
       "name": "ArithmeticOverflow",
       "msg": "Arithmetic overflow"
     }

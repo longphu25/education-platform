@@ -27,6 +27,17 @@ pub mod academic_chain {
         instructions::purchase_credits::handler(ctx, amount)
     }
 
+    /// Create a new course
+    pub fn create_course(
+        ctx: Context<CreateCourse>,
+        course_id: String,
+        course_name: String,
+        instructor: Pubkey,
+        required_credits: u64,
+    ) -> Result<()> {
+        instructions::create_course::handler(ctx, course_id, course_name, instructor, required_credits)
+    }
+
     /// Register for a course
     pub fn register_course(
         ctx: Context<RegisterCourse>,

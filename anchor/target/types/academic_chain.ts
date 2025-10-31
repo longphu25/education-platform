@@ -234,6 +234,74 @@ export type AcademicChain = {
       ]
     },
     {
+      "name": "createCourse",
+      "docs": [
+        "Create a new course"
+      ],
+      "discriminator": [
+        120,
+        121,
+        154,
+        164,
+        107,
+        180,
+        167,
+        241
+      ],
+      "accounts": [
+        {
+          "name": "authority",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "course",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  99,
+                  111,
+                  117,
+                  114,
+                  115,
+                  101
+                ]
+              },
+              {
+                "kind": "arg",
+                "path": "courseId"
+              }
+            ]
+          }
+        },
+        {
+          "name": "systemProgram",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "courseId",
+          "type": "string"
+        },
+        {
+          "name": "courseName",
+          "type": "string"
+        },
+        {
+          "name": "instructor",
+          "type": "pubkey"
+        },
+        {
+          "name": "requiredCredits",
+          "type": "u64"
+        }
+      ]
+    },
+    {
       "name": "initialize",
       "docs": [
         "Initialize the program"
@@ -935,6 +1003,21 @@ export type AcademicChain = {
     },
     {
       "code": 6009,
+      "name": "invalidCourseName",
+      "msg": "Invalid course name"
+    },
+    {
+      "code": 6010,
+      "name": "invalidCredits",
+      "msg": "Invalid credits amount"
+    },
+    {
+      "code": 6011,
+      "name": "unauthorized",
+      "msg": "Unauthorized: Only program authority can perform this action"
+    },
+    {
+      "code": 6012,
       "name": "arithmeticOverflow",
       "msg": "Arithmetic overflow"
     }

@@ -32,8 +32,14 @@ export const ACADEMIC_CHAIN_ERROR__CERTIFICATE_ALREADY_MINTED = 0x1776; // 6006
 export const ACADEMIC_CHAIN_ERROR__REQUIREMENTS_NOT_MET = 0x1777; // 6007
 /** InvalidCourseId: Invalid course ID format */
 export const ACADEMIC_CHAIN_ERROR__INVALID_COURSE_ID = 0x1778; // 6008
+/** InvalidCourseName: Invalid course name */
+export const ACADEMIC_CHAIN_ERROR__INVALID_COURSE_NAME = 0x1779; // 6009
+/** InvalidCredits: Invalid credits amount */
+export const ACADEMIC_CHAIN_ERROR__INVALID_CREDITS = 0x177a; // 6010
+/** Unauthorized: Unauthorized: Only program authority can perform this action */
+export const ACADEMIC_CHAIN_ERROR__UNAUTHORIZED = 0x177b; // 6011
 /** ArithmeticOverflow: Arithmetic overflow */
-export const ACADEMIC_CHAIN_ERROR__ARITHMETIC_OVERFLOW = 0x1779; // 6009
+export const ACADEMIC_CHAIN_ERROR__ARITHMETIC_OVERFLOW = 0x177c; // 6012
 
 export type AcademicChainError =
   | typeof ACADEMIC_CHAIN_ERROR__ALREADY_ENROLLED
@@ -43,8 +49,11 @@ export type AcademicChainError =
   | typeof ACADEMIC_CHAIN_ERROR__COURSE_NOT_COMPLETED
   | typeof ACADEMIC_CHAIN_ERROR__INSUFFICIENT_CREDITS
   | typeof ACADEMIC_CHAIN_ERROR__INVALID_COURSE_ID
+  | typeof ACADEMIC_CHAIN_ERROR__INVALID_COURSE_NAME
+  | typeof ACADEMIC_CHAIN_ERROR__INVALID_CREDITS
   | typeof ACADEMIC_CHAIN_ERROR__INVALID_GRADE
   | typeof ACADEMIC_CHAIN_ERROR__REQUIREMENTS_NOT_MET
+  | typeof ACADEMIC_CHAIN_ERROR__UNAUTHORIZED
   | typeof ACADEMIC_CHAIN_ERROR__UNAUTHORIZED_INSTRUCTOR;
 
 let academicChainErrorMessages: Record<AcademicChainError, string> | undefined;
@@ -57,8 +66,11 @@ if (process.env.NODE_ENV !== 'production') {
     [ACADEMIC_CHAIN_ERROR__COURSE_NOT_COMPLETED]: `Course not completed yet`,
     [ACADEMIC_CHAIN_ERROR__INSUFFICIENT_CREDITS]: `Insufficient credits to register for this course`,
     [ACADEMIC_CHAIN_ERROR__INVALID_COURSE_ID]: `Invalid course ID format`,
+    [ACADEMIC_CHAIN_ERROR__INVALID_COURSE_NAME]: `Invalid course name`,
+    [ACADEMIC_CHAIN_ERROR__INVALID_CREDITS]: `Invalid credits amount`,
     [ACADEMIC_CHAIN_ERROR__INVALID_GRADE]: `Invalid grade value (must be 0-100)`,
     [ACADEMIC_CHAIN_ERROR__REQUIREMENTS_NOT_MET]: `Not all required courses completed`,
+    [ACADEMIC_CHAIN_ERROR__UNAUTHORIZED]: `Unauthorized: Only program authority can perform this action`,
     [ACADEMIC_CHAIN_ERROR__UNAUTHORIZED_INSTRUCTOR]: `Unauthorized: Only instructor can perform this action`,
   };
 }
