@@ -1,25 +1,128 @@
 'use client';
 
-import { useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { AlertCircle, BookOpen, Clock, CreditCard, Users, Star, CheckCircle } from 'lucide-react';
+import { AlertCircle, BookOpen, Clock, CreditCard, Users, Star, CheckCircle, Loader2 } from 'lucide-react';
 import { Alert, AlertDescription } from '@/components/ui/alert';
-import { mockCourses, mockStudent, mockEnrollments } from '@/lib/mockData';
+import { useCourseRegistrationPage } from '@/hooks/useAcademicChain';
+import { mockCourses } from '@/lib/mockData';
+import { useWalletUi } from '@wallet-ui/react';
+import { getStudentProfile } from '@/lib/academic-chain-client';
+import { useQuery } from '@tanstack/react-query';
+import type { Address } from 'gill';
 
 export default function CourseRegistrationPage() {
   const params = useParams();
   const router = useRouter();
-  const [isRegistering, setIsRegistering] = useState(false);
-  
   const courseId = params.courseId as string;
-  const course = mockCourses.find(c => c.id === courseId);
-  const existingEnrollment = mockEnrollments.find(
-    e => e.courseId === courseId && e.studentId === mockStudent.id
-  );
+  const { account } = useWalletUi();
+  
+  // Use blockchain data
+  const {
+    wallet,
+    course: onChainCourse,
+    creditBalance: tokenBalance,
+    isLoading,
+    isEnrolled,
+    isProcessing,
+    registerCourse,
+  } = useCourseRegistrationPage(courseId);
 
+  // Also fetch from student profile as fallback
+  const { data: studentProfile } = useQuery({
+    queryKey: ['student-profile-balance-register', account?.address],
+    queryFn: () => getStudentProfile(account!.address as Address),
+    enabled: !!account,
+  });
+  
+  // Calculate balance from profile if available
+  const profileBalance = studentProfile 
+    ? Number(studentProfile.data.totalCreditsPurchased - studentProfile.data.totalCreditsSpent)
+    : null;
+  
+  // Use token balance if available, otherwise use profile balance, otherwise 0
+  const creditBalance = tokenBalance || profileBalance || 0;
+
+  // Fallback to mock data for UI display (since course details may be stored off-chain)
+  const mockCourse = mockCourses.find(c => c.id === courseId);
+  
+  // Use on-chain data if available, otherwise use mock
+  const course = mockCourse; // In production, you'd fetch full course details from your API
+  const requiredCredits = onChainCourse?.requiredCredits 
+    ? Number(onChainCourse.requiredCredits) 
+    : course?.requiredCredits || 0;
+
+  // Recalculate canAfford with the correct balance
+  const canAfford = creditBalance >= requiredCredits;
+  const canRegister = !isEnrolled && canAfford && !!course;
+
+  // Log for debugging
+  console.log('📊 Registration Page State:', {
+    courseId,
+    wallet: !!wallet,
+    walletAddress: wallet?.publicKey?.toString(),
+    tokenBalance,
+    profileBalance,
+    creditBalance,
+    requiredCredits,
+    canAfford,
+    canRegister,
+    isEnrolled,
+    isLoading,
+  });
+
+  // Handle course registration
+  const handleRegister = async () => {
+    if (!canRegister || !wallet) return;
+    
+    try {
+      await registerCourse(courseId);
+      
+      // Redirect to course page on success
+      router.push(`/dashboard/courses/${courseId}`);
+    } catch (error) {
+      // Error is already handled by the hook with toast
+      console.error('Registration error:', error);
+    }
+  };
+
+  // Wallet not connected
+  if (!wallet) {
+    return (
+      <div className="max-w-4xl mx-auto space-y-6">
+        <Card>
+          <CardContent className="text-center py-12">
+            <AlertCircle className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
+            <h3 className="text-lg font-medium mb-2">Wallet Not Connected</h3>
+            <p className="text-muted-foreground mb-4">
+              Please connect your wallet to register for courses
+            </p>
+            <Button onClick={() => router.push('/dashboard/courses')}>
+              Back to Courses
+            </Button>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
+
+  // Loading state
+  if (isLoading) {
+    return (
+      <div className="max-w-4xl mx-auto space-y-6">
+        <Card>
+          <CardContent className="text-center py-12">
+            <Loader2 className="h-12 w-12 text-muted-foreground mx-auto mb-4 animate-spin" />
+            <h3 className="text-lg font-medium mb-2">Loading course details...</h3>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
+
+  // Course not found
   if (!course) {
     return (
       <div className="max-w-4xl mx-auto space-y-6">
@@ -36,23 +139,9 @@ export default function CourseRegistrationPage() {
     );
   }
 
-  const canAfford = mockStudent.creditBalance >= course.requiredCredits;
-  const isAlreadyEnrolled = !!existingEnrollment;
+  const balanceAfterRegistration = creditBalance - requiredCredits;
 
-  const handleRegister = async () => {
-    if (!canAfford || isAlreadyEnrolled) return;
-    
-    setIsRegistering(true);
-    
-    // Simulate transaction processing
-    await new Promise(resolve => setTimeout(resolve, 3000));
-    
-    setIsRegistering(false);
-    
-    // Show success and redirect
-    alert('Successfully enrolled! (This is a mock transaction)');
-    router.push(`/dashboard/courses/${courseId}`);
-  };
+
 
   return (
     <div className="max-w-4xl mx-auto space-y-6">
@@ -171,25 +260,40 @@ export default function CourseRegistrationPage() {
               <div className="space-y-2">
                 <div className="flex justify-between text-sm">
                   <span>Credits Required</span>
-                  <span className="font-medium">{course.requiredCredits}</span>
+                  <span className="font-medium">{requiredCredits}</span>
                 </div>
                 <div className="flex justify-between text-sm">
                   <span>Your Balance</span>
                   <span className={`font-medium ${canAfford ? 'text-green-600' : 'text-red-600'}`}>
-                    {mockStudent.creditBalance}
+                    {creditBalance}
                   </span>
                 </div>
                 <div className="border-t my-2"></div>
                 <div className="flex justify-between">
                   <span>After Registration</span>
                   <span className="font-medium">
-                    {mockStudent.creditBalance - course.requiredCredits}
+                    {balanceAfterRegistration}
                   </span>
                 </div>
               </div>
 
+              {/* Debug info - development only */}
+              {process.env.NODE_ENV === 'development' && (
+                <div className="p-3 bg-muted/50 rounded-md border">
+                  <p className="text-xs font-mono mb-1">
+                    <span className="text-muted-foreground">Token Balance:</span> {tokenBalance}
+                  </p>
+                  <p className="text-xs font-mono mb-1">
+                    <span className="text-muted-foreground">Profile Balance:</span> {profileBalance ?? 'N/A'}
+                  </p>
+                  <p className="text-xs font-mono">
+                    <span className="text-muted-foreground">Final Balance:</span> {creditBalance}
+                  </p>
+                </div>
+              )}
+
               {/* Alerts */}
-              {isAlreadyEnrolled && (
+              {isEnrolled && (
                 <Alert>
                   <CheckCircle className="h-4 w-4" />
                   <AlertDescription>
@@ -198,16 +302,16 @@ export default function CourseRegistrationPage() {
                 </Alert>
               )}
 
-              {!canAfford && !isAlreadyEnrolled && (
+              {!canAfford && !isEnrolled && (
                 <Alert variant="destructive">
                   <AlertCircle className="h-4 w-4" />
                   <AlertDescription>
-                    Insufficient credits. You need {course.requiredCredits - mockStudent.creditBalance} more credits.
+                    Insufficient credits. You need {requiredCredits - creditBalance} more credits.
                   </AlertDescription>
                 </Alert>
               )}
 
-              {canAfford && !isAlreadyEnrolled && (
+              {canAfford && !isEnrolled && (
                 <Alert>
                   <CheckCircle className="h-4 w-4" />
                   <AlertDescription>
@@ -218,7 +322,7 @@ export default function CourseRegistrationPage() {
 
               {/* Action Buttons */}
               <div className="space-y-2">
-                {isAlreadyEnrolled ? (
+                {isEnrolled ? (
                   <Button className="w-full" onClick={() => router.push(`/dashboard/courses/${courseId}`)}>
                     Go to Course
                   </Button>
@@ -231,15 +335,15 @@ export default function CourseRegistrationPage() {
                     className="w-full" 
                     size="lg"
                     onClick={handleRegister}
-                    disabled={isRegistering}
+                    disabled={isProcessing || !canRegister}
                   >
-                    {isRegistering ? (
+                    {isProcessing ? (
                       <>
-                        <AlertCircle className="h-4 w-4 mr-2 animate-spin" />
+                        <Loader2 className="h-4 w-4 mr-2 animate-spin" />
                         Registering...
                       </>
                     ) : (
-                      `Register for ${course.requiredCredits} Credits`
+                      `Register for ${requiredCredits} Credits`
                     )}
                   </Button>
                 )}

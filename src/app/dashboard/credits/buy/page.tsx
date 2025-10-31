@@ -204,14 +204,42 @@ function ConnectedPurchaseSection(
   const rawBalance = totalPurchased - totalSpent
   const currentBalance = rawBalance < 0n ? 0n : rawBalance
 
+  // Debug logging
+  console.log('📊 Buy Credits Page - Balance Info:', {
+    hasProfile: !!studentProfile,
+    profileLoading,
+    totalPurchased: totalPurchased.toString(),
+    totalSpent: totalSpent.toString(),
+    currentBalance: currentBalance.toString(),
+    rawBalance: rawBalance.toString(),
+    walletAddress: account.address.slice(0, 8) + '...',
+  })
+
+  // Show helpful message if profile doesn't exist yet
+  const balanceText = studentProfile 
+    ? `${currentBalance.toString()} Credits`
+    : profileLoading 
+    ? 'Loading...' 
+    : '0 Credits (Profile not initialized)';
+
+  const totalSpentText = studentProfile
+    ? `Total spent: ${totalSpent.toString()} credits`
+    : profileLoading
+    ? 'Loading...'
+    : 'Total spent: 0 credits (No activity yet)';
+
+  // Note: This balance is from the student profile PDA which tracks purchase history.
+  // The actual token account balance might differ if credits were transferred or 
+  // if the profile wasn't initialized properly.
+  const emptyStateMessage = !profileLoading && !studentProfile
+    ? 'No on-chain profile yet. Your profile will be created with your first purchase or course enrollment.'
+    : undefined;
+
   const balanceInfo = {
     loading: profileLoading,
-    balanceText: `${currentBalance.toString()} Credits`,
-    totalSpentText: `Total spent: ${totalSpent.toString()} credits`,
-    emptyState:
-      !profileLoading && !studentProfile
-        ? 'No on-chain activity yet. Your credits will appear after the first purchase.'
-        : undefined,
+    balanceText,
+    totalSpentText,
+    emptyState: emptyStateMessage,
   }
 
   const purchaseError =

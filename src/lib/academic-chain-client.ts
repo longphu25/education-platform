@@ -305,10 +305,23 @@ export async function getStudentProfile(
     ],
   })
 
+  console.log('🔍 Fetching student profile:', {
+    studentAddress: studentAddress.slice(0, 8) + '...',
+    profilePda: studentProfilePda,
+  })
+
   try {
     const profile = await fetchStudentProfile(rpc, studentProfilePda)
+    
+    console.log('✅ Student profile fetched:', {
+      totalCreditsPurchased: profile?.data.totalCreditsPurchased?.toString() || '0',
+      totalCreditsSpent: profile?.data.totalCreditsSpent?.toString() || '0',
+      coursesCompleted: profile?.data.coursesCompleted?.toString() || '0',
+    })
+    
     return profile
   } catch {
+    console.log('⚠️ Student profile does not exist yet (this is normal for new users)')
     // Profile doesn't exist yet
     return null
   }
